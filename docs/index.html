@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-L7gQHwdD14QEAbsq+oxBWOy5LoNPOyGlyiQx49IbE3w='; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<meta name="description" content="Strata에서 Qwen 3.8 Flash Next의 한국어 출력 제약을 설치하고 검증하거나 기존 서버로 복구하는 안내.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-of4x/my8e7l1odMI0b/+NYoE4YTxKG1uubJsCViI7NE='; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
 <title>Qwen 3.8 Flash Next 한국어 출력 제약</title>
 <style>
 :root { color-scheme:light; --paper:#f5f6f0; --white:#fff; --ink:#17231d; --muted:#4b5d52; --line:#d8e1d8; --green:#116349; --mint:#e6f3ea; --terminal:#14231c; --light:#ebf6ee; --amber:#773910; --sand:#fff2e2; --radius:16px; }
@@ -120,13 +121,13 @@ footer .frame { display:flex; justify-content:space-between; flex-wrap:wrap; gap
         <li><span class="glyph" aria-hidden="true">↳</span><div><strong>토큰 선택과 상태 갱신</strong><small>‘아홉’처럼 나뉜 한글 바이트를 이어서 처리</small></div></li>
         <li><span class="glyph" aria-hidden="true">✓</span><div><strong>응답에서 확인</strong><small>응답 헤더에 정책 적용 여부 표시</small></div></li>
       </ol>
-      <figcaption><code>X-Strata-Ko-Policy</code> · 자세한 분기는 <a href="workflow.md">작동 흐름도</a>에서 확인</figcaption>
+      <figcaption><code>X-Strata-Ko-Policy</code> · 자세한 분기는 <a href="https://github.com/Burntgogi/qwen38-fn-ko-output/blob/main/docs/workflow.md" data-file-href="workflow.md">작동 흐름도</a>에서 확인</figcaption>
     </figure>
   </section>
   <section class="guide" id="guide" aria-labelledby="guide-title">
     <h2 id="guide-title">설치에서 복구까지</h2>
     <p class="description">Linux·NVIDIA CUDA, Python 3.12 이상, Git·CMake·Ninja, 이미 작동하는 Strata 모델과 팩이 필요합니다.</p>
-    <noscript><p>브라우저에서 스크립트 실행이 꺼져 있습니다. <a href="../README.md">README의 전체 수동 절차</a>를 이용할 수 있습니다.</p></noscript>
+    <noscript><p>브라우저에서 스크립트 실행이 꺼져 있습니다. <a href="https://github.com/Burntgogi/qwen38-fn-ko-output#설치">GitHub 수동 설치 절차</a>를 읽거나 압축 내 <code>README.md</code>를 여세요.</p></noscript>
     <div class="grid">
       <aside class="card settings" aria-label="명령에 사용할 값">
         <h3>내 환경의 경로</h3>
@@ -157,7 +158,7 @@ footer .frame { display:flex; justify-content:space-between; flex-wrap:wrap; gap
           <h3>기존 모델과 새 설치 경로 확인</h3>
           <p>배포판 폴더에서 Bash를 열거나 해당 경로를 입력하세요. ZIP으로 받았다면 같은 릴리스의 SHA-256을 먼저 확인하세요. 소스와 Python 의존성을 받는 단계에서 인터넷을 사용합니다.</p>
           <p>지정한 Strata 체크아웃의 현재 커밋을 복사해 패치합니다. 엔진 0.1.60을 기준으로 검증했습니다. 다른 버전은 빌드와 응답 검증을 거쳐 적용하세요.</p>
-          <p>체크아웃이 없다면 <a href="../README.md#검증-기준-소스가-필요한-경우">검증 기준 소스 받기</a>를 참고하세요. 새 런타임은 <code>off</code>로 시작합니다.</p>
+          <p>체크아웃이 없다면 <a href="https://github.com/Burntgogi/qwen38-fn-ko-output#검증-기준-소스가-필요한-경우" data-file-href="../README.md#검증-기준-소스가-필요한-경우">검증 기준 소스 받기</a>를 참고하세요. 새 런타임은 <code>off</code>로 시작합니다.</p>
           <div class="command">
             <div class="command-head"><span>Bash</span><button class="copy" type="button" data-copy="code-prepare" disabled>복사</button></div>
             <pre tabindex="0"><code id="code-prepare"></code></pre>
@@ -209,7 +210,7 @@ footer .frame { display:flex; justify-content:space-between; flex-wrap:wrap; gap
   </section>
   <section class="card agent" id="agent" aria-labelledby="agent-title">
     <h2 id="agent-title">설치를 에이전트에 맡기기</h2>
-    <p class="description">에이전트가 내려받은 배포판 폴더를 열 수 있는 상태에서 이 요청문과 <a href="../INSTALL_FOR_AGENTS.md">에이전트 안내</a>를 전달하세요.</p>
+    <p class="description">에이전트가 내려받은 배포판 폴더를 열 수 있는 상태에서 이 요청문과 <a href="https://github.com/Burntgogi/qwen38-fn-ko-output/blob/main/INSTALL_FOR_AGENTS.md" data-file-href="../INSTALL_FOR_AGENTS.md">에이전트 안내</a>를 전달하세요.</p>
     <div class="command">
       <div class="command-head"><span>요청문</span><button class="copy" type="button" data-copy="agent-prompt" disabled>복사</button></div>
       <pre tabindex="0"><code id="agent-prompt">이 배포판의 INSTALL_FOR_AGENTS.md와 README.md에 따라 제 로컬 Strata 환경에 Qwen 3.8 Flash Next 한국어 출력 제약을 설치하고 검증해 주세요. 기존 팩과 서버 JSON을 쓰고 별도 런타임·루프백 포트에서 시작하세요. 정책 해제와 적용을 각각 확인하고 기존 서버로 돌아가는 방법을 알려 주세요. 프로필 원문, API 키, 대화는 공유하지 마세요.</code></pre>
@@ -218,10 +219,13 @@ footer .frame { display:flex; justify-content:space-between; flex-wrap:wrap; gap
   </section>
 </main>
 <footer>
-  <div class="frame"><span>Linux · NVIDIA CUDA · 검증 기준 Strata 엔진 0.1.60</span><span><a href="../README.md">수동 설치 안내</a> · <a href="security-audit.md">보안·개인정보 감사</a></span></div>
+  <div class="frame"><span>Linux · NVIDIA CUDA · 검증 기준 Strata 엔진 0.1.60</span><span><a href="https://github.com/Burntgogi/qwen38-fn-ko-output#설치" data-file-href="../README.md#설치">수동 설치 안내</a> · <a href="https://github.com/Burntgogi/qwen38-fn-ko-output/blob/main/docs/security-audit.md" data-file-href="security-audit.md">보안·개인정보 감사</a></span></div>
 </footer>
 <script>
 "use strict";
+if (location.protocol === "file:") {
+  for (const link of document.querySelectorAll("[data-file-href]")) link.href = link.dataset.fileHref;
+}
 const byId = (id) => document.getElementById(id);
 const ids = ["pack", "profile", "workdir", "port", "arch", "addon", "source", "runtime", "offline"];
 const tabs = Array.from(document.querySelectorAll('[role="tab"]'));

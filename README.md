@@ -1,10 +1,24 @@
-# Qwen 3.8 Flash Next 한국어 출력 제약
+<p align="center"><strong>한국어</strong> · <a href="README.en.md">English</a></p>
 
-Strata에서 Qwen 3.8 Flash Next로 한국어 답변을 생성할 때 한자 혼입을 줄이는 소스 패치입니다. 다음 토큰을 고르기 전에 UTF-8 바이트를 검사합니다. ‘아홉’처럼 여러 토큰으로 나뉜 한글은 끝까지 조합할 수 있습니다.
+<h1 align="center">qwen38-fn-ko-output<br>Qwen 3.8 Flash Next 한국어 답변의 한자 혼입을 줄입니다.</h1>
 
-[설치·복구 웹 안내](docs/index.html) · [작동 흐름도](docs/workflow.md) · [설치 에이전트 안내](INSTALL_FOR_AGENTS.md) · [보안·개인정보 감사](docs/security-audit.md)
+<p align="center">Strata용 소스 패치입니다. ‘아홉’처럼 여러 토큰으로 나뉜 한글을 이어서 출력하고, 요청별로 정책을 끌 수 있습니다.</p>
 
-웹 안내는 GitHub에서 내려받아 `docs/index.html`을 브라우저로 열면 됩니다. 아래 절차만으로도 설치·검증·복구할 수 있습니다.
+<p align="center">
+  <a href="https://burntgogi.github.io/qwen38-fn-ko-output/"><img src="docs/assets/guide-preview.png" width="100%" alt="설치·검증·복구 단계와 명령을 보여 주는 웹 안내 화면"></a>
+</p>
+
+<p align="center">
+  <a href="https://burntgogi.github.io/qwen38-fn-ko-output/"><strong>설치·복구 웹 안내 열기</strong></a> ·
+  <a href="https://github.com/Burntgogi/qwen38-fn-ko-output/releases/tag/v0.1.2">v0.1.2 프리뷰 받기</a>
+</p>
+
+<p align="center">
+  <a href="#설치">수동 설치</a> · <a href="#작동-구조">작동 구조</a> · <a href="#적용-확인과-롤백">롤백</a> ·
+  <a href="INSTALL_FOR_AGENTS.md">설치 에이전트 안내</a> · <a href="docs/security-audit.md">보안·개인정보 감사</a>
+</p>
+
+웹 안내에서 환경에 맞는 Bash 명령을 만들 수 있습니다. 아래 절차는 웹 안내나 AI 없이도 따라 할 수 있습니다. 배포 ZIP의 `docs/index.html`을 브라우저로 열어 웹 안내를 오프라인에서도 사용할 수 있습니다.
 
 ## 지원 범위
 
@@ -15,13 +29,13 @@ Strata에서 Qwen 3.8 Flash Next로 한국어 답변을 생성할 때 한자 혼
 
 ## 작동 구조
 
-컨트롤러가 요청별로 `auto`, `on`, `off`를 결정합니다. `on`이면 CUDA 엔진은 현재 UTF-8 상태에서 허용되는 토큰만 뽑고, 확정된 토큰으로 다음 상태를 갱신합니다. `off`나 `off/preserve`면 원래의 생성 경로를 사용합니다. 적용 여부는 응답 헤더 `X-Strata-Ko-Policy`에서 확인합니다.
+컨트롤러가 요청별로 `auto`, `on`, `off`를 결정합니다. `on`이면 CUDA 엔진은 현재 UTF-8 상태에서 허용되는 토큰만 뽑고, 확정된 토큰으로 다음 상태를 갱신합니다. `off`나 `off/preserve`면 원래의 생성 경로를 사용합니다. 적용 여부는 응답 헤더 `X-Strata-Ko-Policy`에서 확인합니다. [작동 흐름도](docs/workflow.md)
 
 ## 설치
 
 Python 3.12 이상, Git, CMake, Ninja, CUDA 툴킷과 정상 동작하는 Qwen 모델·Strata 팩·서버 JSON이 필요합니다. ZIP을 푼 디렉터리에서 Bash를 엽니다. `STRATA`에는 사용할 Git 체크아웃의 경로를 입력합니다. `PACK`, `PROFILE`, `WORKDIR`에는 각각 기존 팩, 서버 JSON, 원래 서버의 작업 디렉터리를 입력합니다. 프로필의 `args`에는 `"--pack", "…"` 두 항목이 있어야 합니다.
 
-배포 ZIP과 체크섬 파일을 같은 폴더에 두고 확인합니다.
+[프리뷰 릴리스](https://github.com/Burntgogi/qwen38-fn-ko-output/releases/tag/v0.1.2)의 배포 ZIP과 체크섬 파일을 같은 폴더에 두고 확인합니다.
 
 ```bash
 sha256sum -c qwen38-fn-ko-output-v0.1.2.zip.sha256 &&
@@ -110,6 +124,8 @@ cmake --build "$RUNTIME/build" --target strata -j 2
 - 에이전트에 설치를 맡기려면 [설치 에이전트 안내](INSTALL_FOR_AGENTS.md)를 전달합니다. 적용할 팩과 프로필은 로컬 경로로 지정하고, API 키나 프로필 전체 내용은 채팅이나 공개 이슈에 붙이지 않습니다.
 - `release.py`는 소스 준비, 런처 설정, 시작과 운영 스위치를 제공한다. `smoke.py`는 서버에 검증 요청을 보내며, `python -m unittest discover -v`는 GPU 없이 실행하는 회귀 검사다.
 - 기존 두 IQ3_S 운영 서버에서 검증한 정책을 패키지화했습니다. `v0.1.2`에서는 기준 커밋과 Strata `v0.2.15` 소스에 패치하고 같은 248,320개 토큰 전이표를 생성했습니다. `v0.2.15`의 Control 0.1.61에서 모의 HTTP 해제 검사도 통과했습니다. 이 Strata 릴리스의 엔진은 0.1.60이며, 해당 소스의 CUDA 빌드와 실모델 구동은 위 절차에서 확인하세요. [Strata v0.2.15 릴리스](https://github.com/Niko1221/Strata/releases/tag/v0.2.15)
+
+호환성 문제는 Strata 버전, GPU, `smoke.py` 결과를 적어 알려 주세요. [GitHub 이슈](https://github.com/Burntgogi/qwen38-fn-ko-output/issues)
 
 ## 라이선스
 
